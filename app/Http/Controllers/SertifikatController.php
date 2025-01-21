@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BabyIncubatorController;
 use App\Models\Instrumen;
 use App\Models\inventori;
+use App\Models\MasterFisikFungsi;
 use App\Models\MasterMetode;
 use App\Models\MasterSatuan;
 use App\Models\PengukuranListrik;
@@ -225,9 +226,18 @@ t</span>';
             'getTeganganUtama',
             'getPengukuranListrik',
             'getNebulizerPengujian',
+            'getParameterPengujian',
             'getTelaahTeknis'
         )->where('id', $id)->first();
-        // dd($sertifikat);
+        $ambilParameterFisik = $sertifikat->getParameterPengujian->FisikFungsi;
+        $hasil = [];
+        foreach ($ambilParameterFisik as $key => $value) {
+            $ParamId = $value[0];
+            $cariFisikFungsi = MasterFisikFungsi::where('id', $ParamId)->first();
+            $hasil[] = $cariFisikFungsi;
+        }
+        $sertifikat['parameterFisik'] = $hasil;
+        dd($sertifikat);
         $satuan = MasterSatuan::get();
         $alatUkurId = $sertifikat->getNamaAlat->AlatUkur;
         $getAlatUkur = inventori::whereIn('id', $alatUkurId)->get();

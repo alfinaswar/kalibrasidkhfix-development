@@ -176,8 +176,8 @@
                             name: 'NamaAlat'
                         },
                         {
-                            data: 'get_metode.Nama',
-                            name: 'get_metode.Nama'
+                            data: 'MetodeInst',
+                            name: 'MetodeInst'
                         },
                         {
                             data: 'LK',

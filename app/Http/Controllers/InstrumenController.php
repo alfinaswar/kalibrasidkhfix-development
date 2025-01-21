@@ -154,7 +154,7 @@ class InstrumenController extends Controller
             'idUser' => auth()->user()->id,
         ]);
 
-        // $viewContent = "@extends('layouts.app') @section('content') @ @endsection";
+        // $viewContent = "@extends('layouts.app') @section('content') @ @ @endsection";
         // $viewPath = resource_path('views' . DIRECTORY_SEPARATOR . 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $request->NamaFile . '.blade.php');
 
         // file_put_contents($viewPath, $viewContent);

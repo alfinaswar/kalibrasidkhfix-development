@@ -45,6 +45,10 @@ class Sertifikat extends Model
     {
         return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
     }
+    public function getParameterPengujian()
+    {
+        return $this->hasOne(AdjustLK::class, 'InstrumenId', 'InstrumenId');
+    }
 
     public function getSatuan()
     {

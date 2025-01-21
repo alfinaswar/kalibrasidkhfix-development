@@ -17,46 +17,63 @@
 
                         {{-- Komponen Alat Ukur --}}
                         @include('sertifikat.form-komponen.alat-ukur')
-                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan')
+
+                        @if (
+                            $sertifikat->getParameterPengujian->TeganganUtama == 'Y' &&
+                                $sertifikat->getParameterPengujian->TeganganUtama == 'Y')
+                            @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan')
+                        @endif
+                        @if (
+                            $sertifikat->getParameterPengujian->TeganganUtama == 'Y' &&
+                                $sertifikat->getParameterPengujian->TeganganUtama == 'N')
+                            @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan-tanpa-tegangan-utama')
+                        @endif
+
                         <div class="row">
-                            <div class="row">
-                                <center>
-                                    <h3 class="card-title text-center text-black fw-bold"
-                                        style="text-decoration: underline;">
-                                        SERTIFIKAT HALAMAN 2</h3>
-                                    <span
-                                        class="text-primary fw-bold text-uppercase">{{ $sertifikat->getNamaAlat->Nama }}</span>
-                                </center>
-                            </div>
-                            <div class="mb-3 col-md-12">
+                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                                PEMERIKSAAN FISIK DAN FUNGSI
+                            </h3>
 
-                                <textarea name="Halaman2" id="Halaman2" class="tinymce" placeholder="Sertifikat Halaman 2" rows="100"
-                                    cols="500">{!! $sertifikat->getSertifikatTanpaLK->Halaman2 ?? '' !!}
-</textarea>
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Parameter</th>
+                                        <th scope="col" colspan="2">
+                                            <center>Hasil</center>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                    @foreach ($sertifikat->getParameterPengujian->FisikFungsi as $key => $fs)
+                                        <tr>
+                                            <th scope="row">{{ $key + 1 }}</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="Parameter1[]"
+                                                    value="{{ $fs[0] }}" readonly>
 
-
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="row">
-                                <center>
-                                    <h3 class="card-title text-center text-black fw-bold"
-                                        style="text-decoration: underline;">
-                                        SERTIFIKAT HALAMAN 3</h3>
-                                    <span
-                                        class="text-primary fw-bold text-uppercase">{{ $sertifikat->getNamaAlat->Nama }}</span>
-                                </center>
-                            </div>
-                            <div class="mb-3 col-md-12">
-
-                                <textarea name="Halaman3" id="Halaman3" class="tinymce" placeholder="Sertifikat Halaman 3" rows="100"
-                                    cols="500">{!! $sertifikat->getSertifikatTanpaLK->Halaman3 ?? '' !!}
-</textarea>
-
-
-                            </div>
-
+                                            </td>
+                                            <td>
+                                                <div class="form-control-wrap">
+                                                    <div class="input-group">
+                                                        <select name="Parameter1[]" class="form-control">
+                                                            <option value="">--Pilih Status--</option>
+                                                            <option value="1">
+                                                                Baik</option>
+                                                            <option value="0">
+                                                                Tidak Baik</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- Hidden English version -->
+                                                <input type="hidden" name="Parameter1[]" value="Body and Surface">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                 </div>
             </div>
