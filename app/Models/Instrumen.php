@@ -21,6 +21,10 @@ class Instrumen extends Model
     {
         return $this->whereJsonContains(MasterAlat::class, 'id', 'AlatUkur');
     }
+    public function getAdjustLK()
+    {
+        return $this->hasOne(AdjustLK::class, 'InstrumenId', 'id');
+    }
     public function getMetode()
     {
         return $this->hasOne(MasterMetode::class, 'id', 'Metode');

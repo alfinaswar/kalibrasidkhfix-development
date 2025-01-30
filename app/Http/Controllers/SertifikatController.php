@@ -6,6 +6,7 @@ use App\Http\Controllers\BabyIncubatorController;
 use App\Models\Instrumen;
 use App\Models\inventori;
 use App\Models\MasterFisikFungsi;
+use App\Models\MasterKeselamatanListrik;
 use App\Models\MasterMetode;
 use App\Models\MasterSatuan;
 use App\Models\PengukuranListrik;
@@ -229,15 +230,8 @@ t</span>';
             'getParameterPengujian',
             'getTelaahTeknis'
         )->where('id', $id)->first();
-        $ambilParameterFisik = $sertifikat->getParameterPengujian->FisikFungsi;
-        $hasil = [];
-        foreach ($ambilParameterFisik as $key => $value) {
-            $ParamId = $value[0];
-            $cariFisikFungsi = MasterFisikFungsi::where('id', $ParamId)->first();
-            $hasil[] = $cariFisikFungsi;
-        }
-        $sertifikat['parameterFisik'] = $hasil;
-        dd($sertifikat);
+
+        // dd($sertifikat);
         $satuan = MasterSatuan::get();
         $alatUkurId = $sertifikat->getNamaAlat->AlatUkur;
         $getAlatUkur = inventori::whereIn('id', $alatUkurId)->get();
@@ -251,6 +245,25 @@ t</span>';
         $controllerClass = 'App\\Http\\Controllers\\' . $namaController;
         // dd($controllerClass);
         if (!class_exists($controllerClass)) {
+            $ambilParameterFisik = $sertifikat->getParameterPengujian->FisikFungsi;
+            $hasil = [];
+            foreach ($ambilParameterFisik as $key => $value) {
+                $ParamId = $value[0];
+                // dd($ParamId);
+                $cariFisikFungsi = MasterFisikFungsi::where('id', $ParamId)->first();
+                $hasil[] = $cariFisikFungsi;
+            }
+            $sertifikat['parameterFisik'] = $hasil;
+
+            $ambilListrik = $sertifikat->getParameterPengujian->KeselamatanListrik;
+            $hasil2 = [];
+            foreach ($ambilListrik as $key2 => $value2) {
+                $ParamId2 = $value2[0];
+                // dd($ParamId);
+                $cariFisikFungsi = MasterKeselamatanListrik::where('id', $ParamId2)->first();
+                $hasil2[] = $cariFisikFungsi;
+            }
+            $sertifikat['parameterListrik'] = $hasil2;
             return view('sertifikat.form-lk.administrasi', compact('sertifikat', 'satuan', 'getAlatUkur'));
         } else {
             $controllerInstance = new $controllerClass;

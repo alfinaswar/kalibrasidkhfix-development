@@ -142,13 +142,173 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row">
+                              <div class="card">
+                                  <div class="card-header">
+                                      <h4 class="card-title">Pengaturan LK</h4>
+                                  </div>
+                                  <div class="card-body">
+                                      <ul class="nav nav-pills mb-4 light">
+                                          <li class="nav-item">
+                                              <a href="#navpills-1" class="nav-link active" data-bs-toggle="tab" aria-expanded="false">
+                                                  <i class="fas fa-thermometer-half"></i> Pengukuran Suhu Lingkungan
+                                              </a>
+                                          </li>
+                                          <li class="nav-item">
+                                              <a href="#navpills-2" class="nav-link" data-bs-toggle="tab" aria-expanded="false">
+                                                  <i class="fas fa-bolt"></i> Pengukuran Tegangan Utama
+                                              </a>
+                                          </li>
+                                          <li class="nav-item">
+                                              <a href="#navpills-3" class="nav-link" data-bs-toggle="tab" aria-expanded="true">
+                                                  <i class="fas fa-cogs"></i> Parameter Fisik dan Fungsi
+                                              </a>
+                                          </li>
+                                          <li class="nav-item">
+                                              <a href="#navpills-4" class="nav-link" data-bs-toggle="tab" aria-expanded="true">
+                                                  <i class="fas fa-plug"></i> Parameter Kelistrikan
+                                              </a>
+                                          </li>
+                                      </ul>
+                                      <div class="tab-content">
+                                          <div id="navpills-1" class="tab-pane active">
+                                              <div class="row">
+                                                  <div class="col-md-12">
+                                                      <div class="mb-3">
+                                                          <label class="form-label">Pengukuran Suhu Lingkungan</label>
+                                                          <div class="form-check">
+                                                              <input class="form-check-input" type="radio" name="PengukuranSuhu" id="Y" value="Y" {{ $instrumen->getAdjustLK->PengukuranSuhu == 'Y' ? 'checked' : '' }}>
+                                                              <label class="form-check-label" for="Y">YA</label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                              <input class="form-check-input" type="radio" name="PengukuranSuhu" id="N" value="N" {{ old('PengukuranSuhu', $instrumen->getAdjustLK->PengukuranSuhu) == 'N' ? 'checked' : '' }}>
+                                                              <label class="form-check-label" for="N">TIDAK</label>
+                                                          </div>
+                                                          @error('PengukuranSuhu')
+                                                              <span class="invalid-feedback" role="alert">
+                                                                  <strong>{{ $message }}</strong>
+                                                              </span>
+                                                          @enderror
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div id="navpills-2" class="tab-pane">
+                                              <div class="row">
+                                                  <div class="col-md-12">
+                                                      <div class="mb-3">
+                                                          <label class="form-label">Pengukuran Tegangan Utama</label>
+                                                          <div class="form-check">
+                                                              <input class="form-check-input" type="radio" name="TeganganUtama" id="Y" value="Y" {{ old('TeganganUtama',$instrumen->getAdjustLK->TeganganUtama) == 'Y' ? 'checked' : '' }}>
+                                                              <label class="form-check-label" for="Y">YA</label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                              <input class="form-check-input" type="radio" name="TeganganUtama" id="N" value="N" {{ old('TeganganUtama',$instrumen->getAdjustLK->TeganganUtama) == 'N' ? 'checked' : '' }}>
+                                                              <label class="form-check-label" for="N">TIDAK</label>
+                                                          </div>
+                                                          @error('TeganganUtama')
+                                                              <span class="invalid-feedback" role="alert">
+                                                                  <strong>{{ $message }}</strong>
+                                                              </span>
+                                                          @enderror
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div id="navpills-3" class="tab-pane">
+                                              <div class="row">
+                                                  <div class="col-md-12">
+                                                      <div class="text-end">
+                                                          <button type="button" class="btn btn-primary btn-sm text-end" id="add-row">Add Row</button>
+                                                      </div>
+                                                      <table class="table" id="parameter-table">
+                                                          <thead>
+                                                              <tr>
+                                                                  <th>Nama Parameter</th>
+                                                                  <th>Mapping Excel</th>
+                                                                  <th>Action</th>
+                                                              </tr>
+                                                          </thead>
+                                                          <tbody>
+                                                            @foreach ($instrumen->parameterFisik as $fisik => $value)
+                                                              <tr>
+                                                                  <td>
+                                                                      <select class="multi-select select2-hidden-accessible" name="ParameterIndo[]" tabindex="-1" aria-hidden="true">
+                                                                          <option value="">Pilih Parameter</option>
+                                                                          @foreach ($ParameterFisik as $x)
+                                                                              <option value="{{ $x->id }}" {{ $value->id == $x->id ? 'selected' : '' }}>
+                                                                                  {{ $x->Parameter }}
+                                                                              </option>
+                                                                          @endforeach
+                                                                      </select>
+                                                                  </td>
+                                                                  <td>
+                                                                      <input type="text" name="MappingExcel[]" class="form-control" placeholder="Mapping Excel" value="{{ $value->MappingExcel }}">
+                                                                  </td>
+                                                                  <td>
+                                                                      <button type="button" class="btn btn-danger btn-sm remove-row">Delete</button>
+
+                                                              </tr>
+                                                            @endforeach
+                                                          </tbody>
+                                                      </table>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div id="navpills-4" class="tab-pane">
+                                              <div class="row">
+                                                  <div class="col-md-12">
+
+                                                      <div class="text-end">
+                                                          <button type="button" class="btn btn-primary btn-sm" id="add-row-kelistrikan">Add Row</button>
+                                                      </div>
+                                                      <table class="table" id="parameter-kelistrikan-table">
+                                                          <thead>
+                                                              <tr>
+                                                                  <th>Nama Parameter</th>
+                                                                  <th>Mapping Excel</th>
+                                                                  <th>Action</th>
+                                                              </tr>
+                                                          </thead>
+                                                          <tbody>
+                                                                @foreach ($instrumen->parameterListrik as $listrik => $value)
+                                                              <tr>
+                                                                  <td>
+                                                                      <select class="multi-select select2-hidden-accessible" name="ParameterListrikIndo[]" tabindex="-1" aria-hidden="true">
+                                                                          <option value="">Pilih Parameter</option>
+                                                                          @foreach ($ParameterListrik as $x)
+                                                                              <option value="{{ $x->id }}" {{ $value->id == $x->id ? 'selected' : '' }}>{{ $x->Parameter }}</option>
+                                                                          @endforeach
+                                                                      </select>
+                                                                  </td>
+                                                                  <td>
+                                                                      <input type="text" name="MappingExcelKelistrikan[]" class="form-control" value="{{$value->MappingExcel}}" placeholder="Mapping Excel">
+                                                                  </td>
+                                                                  <td>
+                                                                      <button type="button" class="btn btn-danger btn-sm remove-row">Delete</button>
+                                                                  </td>
+                                                              </tr>
+                                                              @endforeach
+                                                          </tbody>
+                                                      </table>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
                         <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script>
+
+@endsection
+@push('scripts')
+ <script>
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
                 split = number_string.split(','),
@@ -158,4 +318,79 @@
             return prefix == undefined ? rupiah : (rupiah ? rupiah + prefix : '');
         }
     </script>
-@endsection
+     <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              const table = document.getElementById('parameter-table').querySelector('tbody');
+              const addRowButton = document.getElementById('add-row');
+              addRowButton.addEventListener('click', function() {
+                  const newRow = document.createElement('tr');
+                  newRow.innerHTML = `
+ <td>
+                    <select class="multi-select select2-hidden-accessible"
+                            name="ParameterIndo[]">
+                            <option value="">Pilih Parameter</option>
+                            @foreach ($ParameterFisik as $x)
+                                <option value="{{ $x->id }}">
+                                    {{ $x->Parameter }}
+                                </option>
+                            @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="MappingExcel[]" class="form-control" placeholder="Mapping Excel">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">Delete</button>
+                </td>
+            `;
+                  table.appendChild(newRow);
+                  $(newRow).find('.multi-select').select2();
+              });
+
+              table.addEventListener('click', function(e) {
+                  if (e.target.classList.contains('remove-row')) {
+                      const row = e.target.closest('tr');
+                      row.remove();
+                  }
+              });
+          });
+      </script>
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              const kelistrikanTable = document.getElementById('parameter-kelistrikan-table').querySelector('tbody');
+              const addRowButton = document.getElementById('add-row-kelistrikan');
+
+              // Function to add a new row
+              addRowButton.addEventListener('click', function() {
+                  const newRow = document.createElement('tr');
+                  newRow.innerHTML = `
+                <td>
+                    <select class=multi-select select2-hidden-accessible"
+                            name="ParameterListrikIndo[]">
+                            <option value="">Pilih Parameter</option>
+                            @foreach ($ParameterListrik as $x)
+                                <option value="{{ $x->id }}">
+                                    {{ $x->Parameter }}
+                                </option>
+                            @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="MappingExcelKelistrikan[]" class="form-control" placeholder="Mapping Excel">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">Delete</button>
+                </td>
+            `;
+                  kelistrikanTable.appendChild(newRow);
+                  $(newRow).find('.multi-select').select2();
+              });
+              kelistrikanTable.addEventListener('click', function(e) {
+                  if (e.target.classList.contains('remove-row')) {
+                      const row = e.target.closest('tr');
+                      row.remove();
+                  }
+              });
+          });
+      </script>
+@endpush

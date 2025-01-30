@@ -97,8 +97,6 @@ class InstrumenController extends Controller
      */
     public function store(Request $request)
     {
-
-
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'Kategori' => 'required',
@@ -205,10 +203,27 @@ class InstrumenController extends Controller
      */
     public function edit($id)
     {
+        $ParameterFisik = MasterFisikFungsi::orderBy('Parameter', 'ASC')->get();
+        $ParameterListrik = MasterKeselamatanListrik::orderBy('Parameter', 'ASC')->get();
         $metode = MasterMetode::get();
-        $instrumen = Instrumen::find($id);
+        $instrumen = Instrumen::with('getAdjustLK')->find($id);
+        $hasil = [];
+        foreach ($instrumen->getAdjustLK->FisikFungsi as $key => $value) {
+            $ParamId = $value[0];
+            $cariFisikFungsi = MasterFisikFungsi::where('id', $ParamId)->first();
+            $hasil[] = $cariFisikFungsi;
+        }
+        $instrumen['parameterFisik'] = $hasil;
+        $hasilListrik = [];
+        foreach ($instrumen->getAdjustLK->KeselamatanListrik as $key2 => $value2) {
+            $ParamId2 = $value2[0];
+            $cariListrik = MasterKeselamatanListrik::where('id', $ParamId2)->first();
+            $hasilListrik[] = $cariListrik;
+        }
+        $instrumen['parameterListrik'] = $hasilListrik;
+        // dd($instrumen);
         $data = inventori::where('Kategori', 'ALATUKUR')->get();
-        return view('master.instrumen.edit', compact('instrumen', 'data', 'metode'));
+        return view('master.instrumen.edit', compact('instrumen', 'data', 'metode', 'ParameterFisik', 'ParameterListrik'));
     }
 
     /**
@@ -216,6 +231,7 @@ class InstrumenController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validatedData = Validator::make($request->all(), [
             'Kategori' => 'required',
             'Nama' => 'required',
@@ -246,6 +262,36 @@ class InstrumenController extends Controller
         }
 
         $instrumen->update($data);
+
+        $FisikFungsi = [];
+        foreach ($request->ParameterIndo as $key => $value) {
+            $FisikFungsi[] = [
+                $value,
+                $request->MappingExcel[$key]
+            ];
+        }
+
+        $ParameterListrikIndo = [];
+        foreach ($request->ParameterListrikIndo as $key2 => $value2) {
+            $ParameterListrikIndo[] = [
+                $value2,
+                $request->MappingExcelKelistrikan[$key2]
+            ];
+        }
+
+        $adjustLK = AdjustLK::where('InstrumenId', Instrumen::latest()->first()->id)->first();
+        if ($adjustLK) {
+            $adjustLK->update([
+                'PengukuranSuhu' => $data['PengukuranSuhu'],
+                'TeganganUtama' => $data['TeganganUtama'],
+                'FisikFungsi' => $FisikFungsi,
+                'KeselamatanListrik' => $ParameterListrikIndo,
+                'idUser' => auth()->user()->id,
+            ]);
+        } else {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
 
         return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Diupdate');
     }

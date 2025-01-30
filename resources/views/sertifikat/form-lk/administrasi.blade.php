@@ -45,18 +45,19 @@
                                     </tr>
                                 </thead>
                                 <tbody style="vertical-align: middle">
-                                    @foreach ($sertifikat->getParameterPengujian->FisikFungsi as $key => $fs)
+                                    @foreach ($sertifikat->parameterFisik as $key => $fs)
+                                    {{-- {{dd($sertifikat->parameterFisik)}} --}}
                                         <tr>
                                             <th scope="row">{{ $key + 1 }}</th>
                                             <td>
-                                                <input type="text" class="form-control" name="Parameter1[]"
-                                                    value="{{ $fs[0] }}" readonly>
+                                                <input type="text" class="form-control" name="Parameter{{$key+1}}[]"
+                                                    value="{{ $fs->Parameter }}" readonly>
 
                                             </td>
                                             <td>
                                                 <div class="form-control-wrap">
                                                     <div class="input-group">
-                                                        <select name="Parameter1[]" class="form-control">
+                                                        <select name="Parameter{{$key+1}}[]" class="form-control">
                                                             <option value="">--Pilih Status--</option>
                                                             <option value="1">
                                                                 Baik</option>
@@ -68,7 +69,112 @@
                                             </td>
                                             <td>
                                                 <!-- Hidden English version -->
-                                                <input type="hidden" name="Parameter1[]" value="Body and Surface">
+                                                <input type="hidden" name="Parameter{{$key+1}}[]" value="Body and Surface">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                                PENGUKURAN KESELAMATAN LISTRIK
+                            </h3>
+<table class="table table-striped">
+        <thead class="thead-dark bg-primary text-white">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">#</th>
+                <th scope="col">#</th>
+            </tr>
+        </thead>
+        <tbody style="vertical-align: middle">
+            <tr>
+                <th scope="row">1</th>
+                <td>
+                    <strong>Tipe</strong>
+                </td>
+                <td>
+                    <div class="form-control-wrap">
+                        <div class="input-group">
+                            <select name="TipeListrik" class="form-control">
+                                <option value=""> --Pilih Tipe-- </option>
+                                <option value="B"
+                                    {{ isset($sertifikat->getPengukuranListrik->tipe) && $sertifikat->getPengukuranListrik->tipe == 'B' ? 'selected' : '' }}>
+                                    B</option>
+                                <option value="BF"
+                                    {{ isset($sertifikat->getPengukuranListrik->tipe) && $sertifikat->getPengukuranListrik->tipe == 'BF' ? 'selected' : '' }}>
+                                    BF</option>
+                                <option value="CF"
+                                    {{ isset($sertifikat->getPengukuranListrik->tipe) && $sertifikat->getPengukuranListrik->tipe == 'CF' ? 'selected' : '' }}>
+                                    CF</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>
+                    <strong>Kelas</strong>
+                </td>
+                <td>
+                    <div class="form-control-wrap">
+                        <div class="input-group">
+                            <select name="Kelas" class="form-control">
+                                <option value=""> --Pilih Kelas-- </option>
+                                <option value="I"
+                                    {{ isset($sertifikat->getPengukuranListrik->kelas) && $sertifikat->getPengukuranListrik->kelas == 'I' ? 'selected' : '' }}>
+                                    I</option>
+                                <option value="II"
+                                    {{ isset($sertifikat->getPengukuranListrik->kelas) && $sertifikat->getPengukuranListrik->kelas == 'II' ? 'selected' : '' }}>
+                                    II</option>
+                                <option value="IP"
+                                    {{ isset($sertifikat->getPengukuranListrik->kelas) && $sertifikat->getPengukuranListrik->kelas == 'IP' ? 'selected' : '' }}>
+                                    IP</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Parameter</th>
+                                        <th scope="col" colspan="2">
+                                            <center>Hasil</center>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                    @foreach ($sertifikat->parameterListrik as $key => $ls)
+                                    {{-- {{dd($sertifikat->parameterFisik)}} --}}
+                                        <tr>
+                                            <th scope="row">{{ $key + 1 }}</th>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    value="{{ $ls->Parameter }}" readonly>
+
+                                            </td>
+                                            <td>
+                                                <div class="form-control-wrap">
+                                                    <div class="input-group">
+                                                        <select name="TerukurListrik2[]" class="form-control">
+                                                            <option value="">--Pilih Status--</option>
+                                                            <option value="1">
+                                                                Baik</option>
+                                                            <option value="0">
+                                                                Tidak Baik</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- Hidden English version -->
+                                                <input type="hidden" name="" value="Body and Surface">
                                             </td>
                                         </tr>
                                     @endforeach
@@ -79,7 +185,7 @@
             </div>
             <input type="hidden" name="idinstrumen" value="{{ $sertifikat->InstrumenId }}">
             <input type="hidden" name="sertifikatid" value="{{ $sertifikat->id }}">
-            <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="submit" class="btn btn-primary w-100">Simpan</button>
             </form>
         </div>
         <!-- Modal -->
